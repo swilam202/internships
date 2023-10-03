@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 bottomRight: Radius.circular(150),
               ),
             ),
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.45,
             width: MediaQuery.of(context).size.width,
             child: FadeTransition(
               opacity: fadeAnimation,
