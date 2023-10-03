@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'customers list.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -90,13 +92,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 animationDuration: const Duration(seconds: 5),
               ),
               label: const Text(
-                'Select Account',
+                'View all customers',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CustomersList(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.forward),
             ),
           ),
@@ -110,9 +118,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     fadeAnimationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
     slideAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2500));
+      vsync: this,
+      duration: const Duration(milliseconds: 2500),
+    );
     buttonFadeAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1500));
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
     fadeAnimation =
         Tween<double>(begin: 0.1, end: 1.0).animate(fadeAnimationController);
     slideAnimation =
@@ -121,8 +133,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     buttonFadeAnimation = Tween<double>(begin: 0.0, end: 1.0)
         .animate(buttonFadeAnimationController);
 
-    slideAnimationController.forward().then((_) => fadeAnimationController
-        .forward()
-        .then((_) => buttonFadeAnimationController.forward()));
+    slideAnimationController.forward().then(
+          (_) => fadeAnimationController.forward().then(
+                (_) => buttonFadeAnimationController.forward(),
+              ),
+        );
   }
 }
