@@ -1,24 +1,72 @@
+import 'package:banking/core/sqldatabase.dart';
 import 'package:banking/pages/customer%20details.dart';
 import 'package:flutter/material.dart';
 
 class CustomersList extends StatelessWidget {
   const CustomersList({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    List names = ['Mahmoud swilam','Ahmed ali','Mostafa amr','baraa ahmed','abdo adel'];
+    List emails = ['Mahmoudswilam@gmail.com','Ahmedali@gmail.com','Mostafaamr@gmail.com','baraaahmed@gmail.com','abdoadel@gmail.com'];
+    List balances = [6534.4,5452.5,48544,88320,32250.1];
+
+ SqlDB sqlDB = SqlDB();
+
+  Future<List> getUsers()async{
+    return await sqlDB.query();
+  }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: const Text('Customers'),
+       /* actions: [
+          ElevatedButton(
+            onPressed: () async {
+
+             
+              for(int i = 0;i < 5;i++){
+               await sqlDB.insert({
+                'name':names[i],
+                'email':emails[i],
+                'balance':balances[i],
+              });
+              }
+              print(await sqlDB.query());
+            },
+            child: Icon(Icons.add),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+
+             
+             
+               await sqlDB.deleteDataBasess();
+              
+            },
+            child: Icon(Icons.delete)
+          ),
+        ],*/
       ),
-      body: ListView.builder(
+      body: FutureBuilder(
+        future: getUsers(),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return const Center(child: CircularProgressIndicator(),);
+          }
+          else{
+             return  ListView.builder(
         physics: const BouncingScrollPhysics(),
-        itemCount: 10,
+        itemCount: snapshot.data!.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => CustomerDetailsPage(),
+                builder: (context) =>  CustomerDetailsPage(data: snapshot.data![index]),
               ),
             ),
             child: Container(
@@ -28,7 +76,7 @@ class CustomersList extends StatelessWidget {
               margin: const EdgeInsets.all(12),
               padding: const EdgeInsets.all(12),
               height: MediaQuery.of(context).size.height * 0.1,
-              child: const Row(
+              child:  Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
@@ -41,7 +89,7 @@ class CustomersList extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Mahmoud Swilam',
+                          snapshot.data![index]['name'],
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -52,7 +100,7 @@ class CustomersList extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          'mahmoudswilam02@gmail.com',
+                          snapshot.data![index]['email'],
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.grey,
@@ -64,7 +112,7 @@ class CustomersList extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '255.8 \$',
+                    '${snapshot.data![index]['balance']} \$',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
@@ -75,7 +123,12 @@ class CustomersList extends StatelessWidget {
             ),
           );
         },
-      ),
+      );
+     
+          }
+          
+          },
+      )
     );
   }
 }

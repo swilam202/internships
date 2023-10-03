@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 
 class CustomerDetailsPage extends StatelessWidget {
-  const CustomerDetailsPage({super.key});
-
+  const CustomerDetailsPage({super.key,required this.data,});
+  final Map<String,dynamic> data;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +16,8 @@ class CustomerDetailsPage extends StatelessWidget {
               const SizedBox(height: 40),
               AnimatedRadialGauge(
                 duration: const Duration(seconds: 3),
-                value: 25682.5,
-                curve: Curves.bounceInOut,
+                value: data['balance'],
+                curve: Curves.linear,
                 radius: MediaQuery.of(context).size.width * 0.4,
 
                 axis: const GaugeAxis(
@@ -31,8 +31,8 @@ class CustomerDetailsPage extends StatelessWidget {
                     segmentSpacing: 4,
                   ),
                 ),
-                child: const Text(
-                  '2505',
+                child:  Text(
+                  data['balance'].toString(),
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -47,8 +47,8 @@ class CustomerDetailsPage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
               const SizedBox(height: 30),
-              const Text(
-                'Mahmoud Swilam',
+               Text(
+                data['name'].toString(),
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,

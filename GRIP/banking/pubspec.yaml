@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   gauge_indicator: ^0.4.3
+  sqflite: ^2.3.0
   flutter:
     sdk: flutter
 
