@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'customers list.dart';
+import 'transactions.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -102,6 +103,42 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const CustomersList(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.forward),
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          FadeTransition(
+            opacity: buttonFadeAnimation,
+            child: ElevatedButton.icon(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  const EdgeInsets.all(8),
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                overlayColor: MaterialStateProperty.all(Colors.amber),
+                backgroundColor: MaterialStateProperty.all(Colors.yellow[500]),
+                animationDuration: const Duration(seconds: 5),
+              ),
+              label: const Text(
+                'View Transactions history',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const TransactionsPage(),
                   ),
                 );
               },

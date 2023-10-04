@@ -1,14 +1,16 @@
-import 'package:banking/core/sqldatabase.dart';
-import 'package:banking/models/customer%20model.dart';
-import 'package:banking/pages/customer%20details.dart';
 import 'package:flutter/material.dart';
+
+import '../core/sqldatabase.dart';
+import '../models/customer model.dart';
+import 'customer details.dart';
+import 'transactions.dart';
 
 class CustomersList extends StatelessWidget {
   const CustomersList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    /* List names = [
+    /*  List names = [
       'Mahmoud swilam',
       'Ahmed ali',
       'Mostafa amr',
@@ -22,20 +24,30 @@ class CustomersList extends StatelessWidget {
       'baraaahmed@gmail.com',
       'abdoadel@gmail.com'
     ];
-    List balances = [6534.4, 5452.5, 48544, 88320, 32250.1];*/
-
+    List balances = [6534.4, 5452.5, 48544, 88320, 32250.1];
+*/
     SqlDB sqlDB = SqlDB();
 
     Future<List> getUsers() async {
-      return await sqlDB.query();
+      return await sqlDB.query('customers');
     }
 
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.amber,
           title: const Text('Customers'),
-          /* actions: [
-          ElevatedButton(
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => TransactionsPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add),
+            ),
+            /* ElevatedButton(
             onPressed: () async {
 
 
@@ -44,9 +56,9 @@ class CustomersList extends StatelessWidget {
                 'name':names[i],
                 'email':emails[i],
                 'balance':balances[i],
-              });
+              },'customers');
               }
-              print(await sqlDB.query());
+              print(await sqlDB.query('customers'));
             },
             child: Icon(Icons.add),
           ),
@@ -59,8 +71,8 @@ class CustomersList extends StatelessWidget {
 
             },
             child: Icon(Icons.delete)
-          ),
-        ],*/
+          ),*/
+          ],
         ),
         body: FutureBuilder(
           future: getUsers(),
@@ -90,8 +102,9 @@ class CustomersList extends StatelessWidget {
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 202, 208, 171),
-                          borderRadius: BorderRadius.circular(12)),
+                        color: const Color.fromARGB(255, 202, 208, 171),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       margin: const EdgeInsets.all(12),
                       padding: const EdgeInsets.all(12),
                       height: MediaQuery.of(context).size.height * 0.1,

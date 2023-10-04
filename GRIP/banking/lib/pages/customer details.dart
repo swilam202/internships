@@ -1,9 +1,10 @@
-import 'package:banking/core/sqldatabase.dart';
-import 'package:banking/models/customer%20model.dart';
-import 'package:banking/pages/home%20page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
+
+import '../core/sqldatabase.dart';
+import '../models/customer model.dart';
+import 'customers list.dart';
 
 class CustomerDetailsPage extends StatelessWidget {
   const CustomerDetailsPage({
@@ -17,7 +18,12 @@ class CustomerDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    allCustomers.removeWhere((element) => element.id == customer.id);
+    List<CustomerModel> customers = [];
+    for (int i = 0; i < allCustomers.length; i++) {
+      if (allCustomers[i].id != customer.id) {
+        customers.add(allCustomers[i]);
+      }
+    }
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
@@ -33,7 +39,7 @@ class CustomerDetailsPage extends StatelessWidget {
                 radius: MediaQuery.of(context).size.width * 0.4,
                 axis: const GaugeAxis(
                   min: 0,
-                  max: 100000,
+                  max: 1000000,
                   degrees: 180,
                   style: GaugeAxisStyle(
                     thickness: 20,
@@ -67,58 +73,7 @@ class CustomerDetailsPage extends StatelessWidget {
               ),
               const SizedBox(height: 50),
               ElevatedButton(
-                onPressed: () {
-
-                  showModalBottomSheet(context: context, builder: (context){
-                    return ListView.builder(
-                      itemCount: allCustomers.length,
-                      itemBuilder: (context,index) {
-                        return ListTile(
-                          onTap: (){
-                            showCupertinoDialog(context: context, builder: (context){
-                              TextEditingController controller = TextEditingController();
-                              return CupertinoAlertDialog(
-                                title: Text('Transfer'),
-                                actions: [
-                                  CupertinoTextField(
-                                    controller: controller,
-                                   keyboardType: TextInputType.phone,
-                                  ),
-
-                                  CupertinoButton(onPressed: ()async{
-
-                                     if(double.parse(controller.text) <= customer.balance.toDouble()){
-                                      SqlDB sqlDB = SqlDB();
-                                      double senderBalance = customer.balance - double.parse(controller.text);
-                                      double receiverBalance = allCustomers[index].balance + double.parse(controller.text);
-                                      print(senderBalance);
-                                      print(receiverBalance);
-                                     await sqlDB.update(customer.id, {'balance': senderBalance,},);
-                                     await sqlDB.update(allCustomers[index].id, {'balance': receiverBalance,},);
-                                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage(),),);
-                                    }
-
-
-
-                                  }, child: Text('submit'),),
-                                ],
-                              );
-
-                            });
-                          },
-                          leading: const CircleAvatar(
-                            radius: 30,
-                            backgroundImage: AssetImage('images/user.png'),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          title: Text(allCustomers[index].name,style: TextStyle(fontSize: 23),),
-                          trailing: Icon(Icons.forward),
-                        );
-                      },
-                    );
-                  });
-
-                },
+                onPressed: () => showTransBottomSheet(context, customers),
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(
                     const EdgeInsets.all(8),
@@ -146,5 +101,88 @@ class CustomerDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  showTransBottomSheet(BuildContext context, List<CustomerModel> customers) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ListView.builder(
+            itemCount: customers.length,
+            padding: const EdgeInsets.all(8.0),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  onTap: () {
+                    showCupertinoDialog(
+                        context: context,
+                        builder: (context) {
+                          TextEditingController controller =
+                              TextEditingController();
+                          return CupertinoAlertDialog(
+                            title: CupertinoTextField(
+                              controller: controller,
+                              keyboardType: TextInputType.phone,
+                            ),
+                            actions: [
+                              CupertinoButton(
+                                onPressed: () async {
+                                  if (double.parse(controller.text) <=
+                                      customer.balance.toDouble()) {
+                                    SqlDB sqlDB = SqlDB();
+                                    double senderBalance = customer.balance -
+                                        double.parse(controller.text);
+                                    double receiverBalance =
+                                        customers[index].balance +
+                                            double.parse(controller.text);
+                                    double transAmount =
+                                        double.parse(controller.text);
+                                    await sqlDB.update(
+                                      customer.id,
+                                      {
+                                        'balance': senderBalance,
+                                      },
+                                    );
+                                    await sqlDB.update(
+                                      customers[index].id,
+                                      {
+                                        'balance': receiverBalance,
+                                      },
+                                    );
+                                    await sqlDB.insert({
+                                      'sender': customer.name,
+                                      'receiver': customers[index].name,
+                                      'amount': transAmount,
+                                    }, 'transactions');
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CustomersList(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: const Text('Transfer'),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  leading: const CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('images/user.png'),
+                    backgroundColor: Colors.transparent,
+                  ),
+                  title: Text(
+                    customers[index].name,
+                    style: const TextStyle(fontSize: 23),
+                  ),
+                  trailing: const Icon(Icons.forward),
+                ),
+              );
+            },
+          );
+        });
   }
 }

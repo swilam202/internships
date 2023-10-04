@@ -22,7 +22,7 @@ class SqlDB {
   _onCreate(Database db, int version) async {
     Batch batch = db.batch();
     batch.execute('''
-    CREATE TABLE users (
+    CREATE TABLE customers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -30,54 +30,34 @@ class SqlDB {
     )
     ''');
 
-    batch.execute(
-      '''
+    batch.execute('''
       CREATE TABLE transactions (
-        sender INTEGER NOT NULL,
-        reciever INTEGER NOT NULL,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender TEXT NOT NULL,
+        receiver TEXT NOT NULL,
         amount REAL NOT NULL
       )
-'''
-    );
+''');
     await batch.commit();
   }
 
-  query() async {
-    List response = await _db!.query('users');
+  query(String tableName) async {
+    List response = await _db!.query(tableName);
     return response;
   }
 
-  insert(Map<String, Object> map) async {
-    int response = await _db!.insert('users', map);
-    return response;
-  }
-
-  delete(int id) async {
-    int response =
-        await _db!.delete('users', where: 'id = ? ', whereArgs: [id]);
-    return response;
-  }
-
-  deleteAll() async {
-    int response = await _db!.delete('users');
+  insert(Map<String, Object> map, String tableName) async {
+    int response = await _db!.insert(tableName, map);
     return response;
   }
 
   update(int id, Map<String, Object> map) async {
     int response = await _db!.update(
-      'users',
+      'customers',
       map,
       where: 'id = ?',
       whereArgs: [id],
     );
     return response;
-  }
-
-  deleteDataBasess()async{
-        String dbpath = await getDatabasesPath();
-    String path = join(dbpath, 'bank.db');
-
-    await deleteDatabase(path);
-    print('********************************************delete*******************');
   }
 }
