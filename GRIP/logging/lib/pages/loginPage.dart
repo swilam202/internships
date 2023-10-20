@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logging/widgets/facebookButton.dart';
 import 'package:logging/widgets/googleButton.dart';
 
 class LoginPage extends StatelessWidget {
@@ -21,7 +22,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 50),
-            Text(
+           /* Text(
               'Login',
               style: TextStyle(
                 fontSize: 30,
@@ -31,6 +32,7 @@ class LoginPage extends StatelessWidget {
             SizedBox(height: 70),
             GoogleButton(),
             SizedBox(height: 30),
+            FacebookButton(),*/
           ],
         ),
       ),

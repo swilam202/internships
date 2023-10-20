@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class HomePage extends StatelessWidget {
   const HomePage({
     super.key,
-    required this.userCredential,
+    //required this.userCredential,
   });
 
-  final UserCredential userCredential;
+ // final UserCredential userCredential;
 
   @override
   Widget build(BuildContext context) {
@@ -23,29 +23,29 @@ class HomePage extends StatelessWidget {
           ),
           child: Column(
             children: [
-              CircleAvatar(
+             /* CircleAvatar(
                 backgroundImage:
                     NetworkImage(userCredential.user!.photoURL ?? ''),
                 onBackgroundImageError: (object, stackTrace) =>
                     const Icon(Icons.error),
                 radius: 60,
-              ),
+              ),*/
               const SizedBox(height: 15),
-              Text(
+             /* Text(
                 userCredential.user!.displayName ?? 'Unknown',
                 style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
+              ),*/
               const SizedBox(height: 15),
-              Text(
+             /* Text(
                 userCredential.user!.email ?? 'Unknown',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

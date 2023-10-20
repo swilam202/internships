@@ -1,3 +1,4 @@
+import 'package:banking/pages/home%20page.dart';
 import 'package:flutter/material.dart';
 
 import '../core/sqldatabase.dart';
@@ -36,43 +37,15 @@ class CustomersList extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.amber,
           title: const Text('Customers'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => TransactionsPage(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.add),
+          leading: IconButton(
+            onPressed: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const MyHomePage(),
+              ),
             ),
-            /* ElevatedButton(
-            onPressed: () async {
-
-
-              for(int i = 0;i < 5;i++){
-               await sqlDB.insert({
-                'name':names[i],
-                'email':emails[i],
-                'balance':balances[i],
-              },'customers');
-              }
-              print(await sqlDB.query('customers'));
-            },
-            child: Icon(Icons.add),
+            icon: const Icon(Icons.arrow_back),
           ),
-          ElevatedButton(
-            onPressed: () async {
-
-
-
-               await sqlDB.deleteDataBasess();
-
-            },
-            child: Icon(Icons.delete)
-          ),*/
-          ],
+        
         ),
         body: FutureBuilder(
           future: getUsers(),

@@ -39,7 +39,7 @@ class CustomerDetailsPage extends StatelessWidget {
                 radius: MediaQuery.of(context).size.width * 0.4,
                 axis: const GaugeAxis(
                   min: 0,
-                  max: 1000000,
+                  max: 100000,
                   degrees: 180,
                   style: GaugeAxisStyle(
                     thickness: 20,

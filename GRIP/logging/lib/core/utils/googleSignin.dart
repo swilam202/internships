@@ -4,25 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:logging/pages/homePage.dart';
 
 Future<void> signInWithGoogle(BuildContext context) async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  try {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth =
-      await googleUser?.authentication;
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-  // Once signed in, return the UserCredential
-  UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithCredential(credential);
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => HomePage(userCredential: userCredential),
-    ),
-  );
+    // Once signed in, return the UserCredential
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+  //  Navigator.of(context).push(
+     // MaterialPageRoute(
+       // builder: (context) => HomePage(userCredential: userCredential),
+     // ),
+    //);
+  } catch (e) {}
 }
